@@ -15,7 +15,11 @@
             "preLaunchCommands": [
                 "monitor speed 15000"
             ],
-            "jlinkscript": ".alif/m55-${command:cpptools.activeConfigName}_setup.jlinkscript"
+            "postLaunchCommands": [
+                "set $sp = __Vectors[0]",
+                "set $pc = __Vectors[1]",
+                "set *0xe000ed08 = __Vectors"
+            ]
         }
     ]
 }

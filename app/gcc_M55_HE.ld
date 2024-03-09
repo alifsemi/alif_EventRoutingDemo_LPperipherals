@@ -58,18 +58,22 @@ SECTIONS
     *lv_*.c.obj(.text .rodata*)
 
     *(startup_ro_data)
+
+    . = ALIGN(16);
   } > MRAM
 
   .copy.table : ALIGN(4)
   {
     __copy_table_start__ = .;
-    LONG ( LOADADDR(.data.at_dtcm) )
-    LONG ( ADDR(.data.at_dtcm) )
-    LONG ( SIZEOF(.data.at_dtcm)/4 )
     LONG ( LOADADDR(.code.at_itcm) )
     LONG ( ADDR(.code.at_itcm) )
     LONG ( SIZEOF(.code.at_itcm)/4 )
+    LONG ( LOADADDR(.data.at_dtcm) )
+    LONG ( ADDR(.data.at_dtcm) )
+    LONG ( SIZEOF(.data.at_dtcm)/4 )
     __copy_table_end__ = .;
+
+    . = ALIGN(16);
   } > MRAM
 
   .zero.table : ALIGN(4)
@@ -82,11 +86,15 @@ SECTIONS
     LONG (ADDR(.bss.at_sram1))
     LONG (SIZEOF(.bss.at_sram1)/4)
     __zero_table_end__ = .;
+
+    . = ALIGN(16);
   } > MRAM
 
   .code.at_itcm : ALIGN(8)
   {
-    *(.text*)    
+    *(.text*)
+
+    . = ALIGN(16);
   } > ITCM AT > MRAM
 
   .data.at_dtcm : ALIGN(8)
@@ -105,7 +113,8 @@ SECTIONS
     *(.ARM.exidx* .gnu.linkonce.armexidx.*)
     __exidx_end = .;
 
-  } > DTCM AT> MRAM
+    . = ALIGN(16);
+  } > DTCM AT > MRAM
 
   .bss.at_sram0 (NOLOAD) : ALIGN(8)
   {
@@ -136,7 +145,7 @@ SECTIONS
      __RAM_segment_used_end__ = .;
      . = . + __APP_HEAP_SIZE;
      . = ALIGN(8);
-   } >DTCM
+   } > DTCM
 
   .heap (NOLOAD) : ALIGN(8)
   {
@@ -199,6 +208,8 @@ SECTIONS
     *(.rodata*)
 
     KEEP(*(.eh_frame*))
+
+    . = ALIGN(16);
   } > MRAM
 
   /* Check if data + heap + stack exceeds RAM limit */
