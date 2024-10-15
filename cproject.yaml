@@ -36,7 +36,7 @@ project:
     # - component: AlifSemiconductor::Device:OSPI FLASH XIP:core
     # - component: AlifSemiconductor::Device:OSPI FLASH XIP:utility
     # - component: AlifSemiconductor::Device:OSPI HYPERRAM XIP
-    # - component: AlifSemiconductor::Device:Power Management
+    - component: AlifSemiconductor::Device:Power Management
     # - component: AlifSemiconductor::Device:Retarget IO:STDERR
     # - component: AlifSemiconductor::Device:Retarget IO:STDIN
     # - component: AlifSemiconductor::Device:Retarget IO:STDOUT

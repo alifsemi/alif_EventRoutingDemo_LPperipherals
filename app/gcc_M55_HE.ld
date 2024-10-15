@@ -46,7 +46,7 @@ ENTRY(Reset_Handler)
 
 SECTIONS
 {
-  .startup.at_mram : ALIGN(16)
+  .startup.at_itcm : ALIGN(4)
   {
     KEEP(*(.vectors))
 
@@ -59,22 +59,17 @@ SECTIONS
 
     *(startup_ro_data)
 
-    . = ALIGN(16);
-  } > MRAM
+    *(.text*)
+  } > ITCM
 
   .copy.table : ALIGN(4)
   {
     __copy_table_start__ = .;
-    LONG ( LOADADDR(.code.at_itcm) )
-    LONG ( ADDR(.code.at_itcm) )
-    LONG ( SIZEOF(.code.at_itcm)/4 )
     LONG ( LOADADDR(.data.at_dtcm) )
     LONG ( ADDR(.data.at_dtcm) )
     LONG ( SIZEOF(.data.at_dtcm)/4 )
     __copy_table_end__ = .;
-
-    . = ALIGN(16);
-  } > MRAM
+  } > ITCM
 
   .zero.table : ALIGN(4)
   {
@@ -86,16 +81,7 @@ SECTIONS
     LONG (ADDR(.bss.at_sram1))
     LONG (SIZEOF(.bss.at_sram1)/4)
     __zero_table_end__ = .;
-
-    . = ALIGN(16);
-  } > MRAM
-
-  .code.at_itcm : ALIGN(8)
-  {
-    *(.text*)
-
-    . = ALIGN(16);
-  } > ITCM AT > MRAM
+  } > ITCM
 
   .data.at_dtcm : ALIGN(8)
   {
@@ -114,7 +100,7 @@ SECTIONS
     __exidx_end = .;
 
     . = ALIGN(16);
-  } > DTCM AT > MRAM
+  } > DTCM AT > ITCM
 
   .bss.at_sram0 (NOLOAD) : ALIGN(8)
   {
@@ -122,7 +108,7 @@ SECTIONS
     * (.bss.lcd_frame_buf)                 /* LCD frame Buffer. */
   } > SRAM0
 
-  .bss.at_sram1 (NOLOAD) :
+  .bss.at_sram1 (NOLOAD) : ALIGN(8)
   {
     * (.bss.camera_frame_buf)              /* Camer Frame Buffer */
     * (.bss.camera_frame_bayer_to_rgb_buf) /* (Optional) Camera Frame Buffer for Bayer to RGB Conversion. */
@@ -134,18 +120,8 @@ SECTIONS
     *(.bss)
     *(.bss.*)
     *(COMMON)
-
-    . = ALIGN(8);
     __bss_end__ = .;
   } > DTCM
-
-  .__app_heap :
-  {
-     . = ALIGN(8);
-     __RAM_segment_used_end__ = .;
-     . = . + __APP_HEAP_SIZE;
-     . = ALIGN(8);
-   } > DTCM
 
   .heap (NOLOAD) : ALIGN(8)
   {
@@ -165,7 +141,7 @@ SECTIONS
   } > DTCM
   PROVIDE(__stack = __StackTop);
 
-  .readonly.at_mram : ALIGN(8)
+  .readonly.at_itcm : ALIGN(4)
   {
     /* Use wildcards to mop up any read-only not directed to TCM */ 
     KEEP(*(.init))
@@ -208,9 +184,7 @@ SECTIONS
     *(.rodata*)
 
     KEEP(*(.eh_frame*))
-
-    . = ALIGN(16);
-  } > MRAM
+  } > ITCM
 
   /* Check if data + heap + stack exceeds RAM limit */
   ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")

@@ -3,6 +3,7 @@
 #include <Driver_GPIO.h>
 #include <dma_mapping.h>
 //#include <pinconf.h>
+#include <pm.h>
 
 #include <se_services_port.h>
 #define SERVICES_check_response {if ((ret != 0) || (service_response != 0)) while(1) __WFI();}
@@ -47,25 +48,17 @@ void main (void)
      * Note: you must keep MRAM ON anytime an M55 application is XIP from MRAM */
     runp.power_domains  = PD_SSE700_AON_MASK;   /* PD6 SYSTOP domain is NOT requested */
     //runp.power_domains |= PD_DBSS_MASK;    /* enable this line during debug */
-    runp.dcdc_mode      = DCDC_MODE_PFM_AUTO;
+    runp.dcdc_voltage   = 750;
+    runp.dcdc_mode      = DCDC_MODE_PFM_FORCED;
     runp.aon_clk_src    = CLK_SRC_LFXO;
     runp.run_clk_src    = CLK_SRC_HFXO;
     runp.cpu_clk_freq   = CLOCK_FREQUENCY_38_4_XO_MHZ;
-    runp.scaled_clk_freq = SCALED_FREQ_RC_ACTIVE_38_4_MHZ;
-    runp.memory_blocks  = MRAM_MASK; /* Note: requesting SRAM0/1 will turn on PD6 SYST */
+    runp.scaled_clk_freq = SCALED_FREQ_RC_ACTIVE_9_6_MHZ;
+    runp.memory_blocks  = MRAM_MASK;
     runp.vdd_ioflex_3V3 = IOFLEX_LEVEL_1V8;
 
     ret = SERVICES_set_run_cfg(se_services_s_handle, &runp, &service_response);
     SERVICES_check_response;
-
-#if 1
-    runp.dcdc_mode      = DCDC_MODE_PFM_FORCED;
-    runp.scaled_clk_freq = SCALED_FREQ_RC_STDBY_38_4_MHZ;
-    /* Note: B2 silicon uses STDBY frequency when DCDC is PFM */
-
-    ret = SERVICES_set_run_cfg(se_services_s_handle, &runp, &service_response);
-    SERVICES_check_response;
-#endif
 
     /* Alif Ensemble Development Kit typically uses 38.4MHz HFXO */
     set_HFXO_CLK( 38400000);        // top level HFXO clock
@@ -112,5 +105,9 @@ void main (void)
     extern void LPTIMER_config();
     LPTIMER_config();
 
-    while (1) __WFI();
+    //ret = SERVICES_power_se_sleep_req(se_services_s_handle, 0, &service_response);
+    //SERVICES_check_response;
+
+    while (1) pm_core_enter_normal_sleep();
+    //while (1) pm_core_enter_deep_sleep();
 }
