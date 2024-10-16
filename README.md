@@ -36,14 +36,15 @@ on the RTSS-HE only.***
 ## Project Setup
 ### Hardware Setup
 1. Alif Ensemble DevKit (Gen 2)
-   - please attach a jumper wire connected between P15_0 and P15_1
-   - also attach a jumper wire connected between P9_2 and P15_2
+   - attach a jumper wire connected between P15_0 and P15_1
+   - attach a jumper wire connected between P9_2 and P15_2
+   - attach a jumper wire connected between P11_4 and P11_5
 2. Logic Analyzer to monitor the below MCU signals
    - P15_0  LPTIMER0    (loopback to P15_1 LPGPIO)
    - P9_2   LPUART_TX   (loopback to P15_2 LPGPIO)
-   - P7_4   LPSPI_DATA  (loopback to P7_5)
-   - P7_6   LPSPI_SCLK
-   - P7_7   LPSPI_SELECT
+   - P11_4  LPSPI_DATA  (loopback to P11_5)
+   - P11_6  LPSPI_SCLK
+   - P11_7  LPSPI_SELECT
    - P0_3   SYST_ACLK clock debug (optional)
    - P1_3   RTSS_HE_CLK clock debug (optional)
 3. Power Analyzer connected to DevKit J5 (for current measurement on MCU_3V3)
@@ -52,9 +53,9 @@ on the RTSS-HE only.***
 ### Software Setup
 The following software must be installed on your system (tested with Ubuntu 22.04 LTS)
 1. Setup the VSCode environment as outlined in [Getting Started with VSCode](https://alifsemi.com/download/AUGD0012).
-   - Ubuntu 22.04 LTS users, please download Arm GCC 10.3-2021.10 (GDB has python issues in GCC 11 & 12 with Ubuntu 22.04)
-2. Modify the Alif Ensemble CMSIS DFP v1.0.0 with the files provided in this project
-   - Extract the archive in the patch directory and overwrite the files at cmsis-packs/AlifSemiconductor/Ensemble/1.0.0/
+   - Ubuntu 22.04 LTS users, if using GDB then please download Arm GCC 10.3-2021.10 (GDB has python issues in GCC 11 & 12 with Ubuntu 22.04). Newer GCC versions are okay if not using GDB.
+2. Modify the Alif Ensemble CMSIS DFP v1.3.0 with the files provided in this project
+   - Extract the archive in the patch directory and overwrite the files at cmsis-packs/AlifSemiconductor/Ensemble/1.3.0/
 3. Install the latest SEGGER J-Link software (optional) [SEGGER J-Link](https://www.segger.com/downloads/jlink)
 
 After setting up the development environment

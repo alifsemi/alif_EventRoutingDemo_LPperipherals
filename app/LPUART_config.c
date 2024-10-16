@@ -24,11 +24,11 @@ volatile uint32_t lpuart_cb_status;
 
 static void configure_lpuart_pinmux()
 {
-    uint32_t padconf = PADCTRL_READ_ENABLE |
-            PADCTRL_OUTPUT_DRIVE_STRENGTH_2MA;
+    /* P7_7 is LPUART_TX */
+    // pinconf_set(PORT_7, PIN_7, PINMUX_ALTERNATE_FUNCTION_2, 0);
 
     /* P9_2 is LPUART_TX */
-    pinconf_set(PORT_9, PIN_2, PINMUX_ALTERNATE_FUNCTION_1, padconf);
+    pinconf_set(PORT_9, PIN_2, PINMUX_ALTERNATE_FUNCTION_1, 0);
 
     /* P15_1 is LPUART DMA event trigger */
     pinconf_set(PORT_15, LPUART_DMA_TX_PERIPH_REQ - 24, PINMUX_ALTERNATE_FUNCTION_0, PADCTRL_READ_ENABLE);

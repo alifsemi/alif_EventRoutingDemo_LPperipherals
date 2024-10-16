@@ -3,7 +3,6 @@ project:
     - group: App
       files:
         - file: app/main.c
-        - file: app/clk.c
         - file: app/LPSPI_config.c
         - file: app/LPTIMER_config.c
         - file: app/LPUART_config.c
@@ -24,6 +23,10 @@ project:
     # needed for Alif Ensemble support
     - component: AlifSemiconductor::Device:Startup&C Startup
     - component: ARM::CMSIS:CORE
+    # - component: ARM::CMSIS-Compiler:I/O:STDIN&User
+    # - component: ARM::CMSIS-Compiler:I/O:STDOUT&User
+    #   define:
+    #     - asm=__asm
 
     # peripheral drivers & middleware, uncomment as needed
     # - component: AlifSemiconductor::BSP:External peripherals:CAMERA Sensor ARX3A0

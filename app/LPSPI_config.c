@@ -45,16 +45,16 @@ static void configure_lpspi_pinmux()
             PADCTRL_OUTPUT_DRIVE_STRENGTH_2MA;
 
     /* LPSPI on Port 7 */
-    pinconf_set(PORT_7, PIN_4, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P7_4 is LPSPI_MISO */
-    pinconf_set(PORT_7, PIN_5, PINMUX_ALTERNATE_FUNCTION_5, padconf);   /* P7_5 is LPSPI_MOSI */
-    pinconf_set(PORT_7, PIN_6, PINMUX_ALTERNATE_FUNCTION_5, padconf);   /* P7_6 is LPSPI_SCLK */
-    pinconf_set(PORT_7, PIN_7, PINMUX_ALTERNATE_FUNCTION_5, padconf);   /* P7_7 is LPSPI_SS0 */
+    // pinconf_set(PORT_7, PIN_4, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P7_4 is LPSPI_MISO */
+    // pinconf_set(PORT_7, PIN_5, PINMUX_ALTERNATE_FUNCTION_5, padconf);   /* P7_5 is LPSPI_MOSI */
+    // pinconf_set(PORT_7, PIN_6, PINMUX_ALTERNATE_FUNCTION_5, padconf);   /* P7_6 is LPSPI_SCLK */
+    // pinconf_set(PORT_7, PIN_7, PINMUX_ALTERNATE_FUNCTION_5, padconf);   /* P7_7 is LPSPI_SS0 */
 
     /* LPSPI on Port 11 */
-    //pinconf_set(PORT_11, PIN_4, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P11_4 is LPSPI_MISO */
-    //pinconf_set(PORT_11, PIN_5, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P11_5 is LPSPI_MOSI */
-    //pinconf_set(PORT_11, PIN_6, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P11_6 is LPSPI_SCLK */
-    //pinconf_set(PORT_11, PIN_7, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P11_7 is LPSPI_SS0 */
+    pinconf_set(PORT_11, PIN_4, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P11_4 is LPSPI_MISO */
+    pinconf_set(PORT_11, PIN_5, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P11_5 is LPSPI_MOSI */
+    pinconf_set(PORT_11, PIN_6, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P11_6 is LPSPI_SCLK */
+    pinconf_set(PORT_11, PIN_7, PINMUX_ALTERNATE_FUNCTION_4, padconf);   /* P11_7 is LPSPI_SS0 */
 
     /* P15_2 is LPSPI DMA event trigger */
     HW_REG32(LPGPIO_CTRL_BASE, ((LPSPI_DMA_TX_PERIPH_REQ - 24) * 0x04)) = 1U;

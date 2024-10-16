@@ -3,28 +3,11 @@
 #include <Driver_GPIO.h>
 #include <dma_mapping.h>
 //#include <pinconf.h>
+#include <clk.h>
 #include <pm.h>
 
 #include <se_services_port.h>
 #define SERVICES_check_response {if ((ret != 0) || (service_response != 0)) while(1) __WFI();}
-
-#define DISABLE_SEMIHOST
-#ifdef DISABLE_SEMIHOST
-#ifndef RTE_Compiler_IO_STDOUT_User
-#define printf(...) (0)
-#endif
-#if defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6100100)
-__ASM(".global __use_no_semihosting");
-void _sys_exit(int ret) { while (1); }
-void _ttywrch(int ch) { return; }
-#elif defined ( __GNUC__ )
-#define TRAP_RET_ZERO  {__BKPT(0); return 0;}
-int _close(int val) TRAP_RET_ZERO
-int _lseek(int val0, int   val1, int val2) TRAP_RET_ZERO
-int _read (int val0, char* val1, int val2) TRAP_RET_ZERO
-int _write(int val0, char* val1, int val2) TRAP_RET_ZERO
-#endif
-#endif
 
 void main (void)
 {
@@ -61,18 +44,14 @@ void main (void)
     SERVICES_check_response;
 
     /* Alif Ensemble Development Kit typically uses 38.4MHz HFXO */
-    set_HFXO_CLK( 38400000);        // top level HFXO clock
-    set_HFRC_CLK( 38400000);        // top level HFRC clock
+    uint32_t current_clk = 38400000;
+    SystemHFOSCClock = current_clk;     // HFOSC clock, used by some peripherals, is either HFRC/2 or HFXO depending on periph_xtal_sel[4]
+    SystemREFClock = current_clk;       // SYST_REFCLK, when not using PLL, is either HFRC or HFXO depending on sys_xtal_sel[0]
+    SystemAXIClock = current_clk;       // SYST_ACLK is either REFCLK or SYSPLL (only SYSPLL can be divided by 1-32)
+    SystemAHBClock = current_clk>>1;    // SYST_HCLK is ACLK div by 1, 2, or 4
+    SystemAPBClock = current_clk>>2;    // SYST_PCLK is ACLK div by 1, 2, or 4
 
-    uint32_t current_clk = get_HFXO_CLK();
-    set_HFOSC_CLK(current_clk);     // HFOSC clock, used by some peripherals, is either HFRC/2 or HFXO depending on periph_xtal_sel[4]
-    set_SOC_REFCLK(current_clk);    // SYST_REFCLK, when not using PLL, is either HFRC or HFXO depending on sys_xtal_sel[0]
-    set_AXI_CLOCK(current_clk);     // SYST_ACLK is either REFCLK or SYSPLL (only SYSPLL can be divided by 1-32)
-    set_AHB_CLOCK(current_clk>>1);  // SYST_HCLK is ACLK div by 1, 2, or 4
-    set_APB_CLOCK(current_clk>>2);  // SYST_PCLK is ACLK div by 1, 2, or 4
-
-    set_RTSS_HE_CLK(current_clk);   // RTSS_HE_CLK is HFRC, HFRC/2, HFXOx2, or HFXO
-    set_RTSS_HP_CLK(current_clk);   // RTSS_HP_CLK is HFRC, HFRC/2, HFXOx2, or HFXO
+    SystemCoreClock = current_clk;      // RTSS_HE_CLK is HFRC, HFRC/2, HFXOx2, or HFXO
 
     /* Alif Ensemble Development Kit typically uses 38.4MHz HFXO */
     //CLKCTL_PER_MST->CAMERA_PIXCLK_CTRL = 100U << 16 | 1;    // output SYST_ACLK/100 on CAM_XVCLK pin
@@ -105,9 +84,8 @@ void main (void)
     extern void LPTIMER_config();
     LPTIMER_config();
 
-    //ret = SERVICES_power_se_sleep_req(se_services_s_handle, 0, &service_response);
-    //SERVICES_check_response;
+    // ret = SERVICES_power_se_sleep_req(se_services_s_handle, 0, &service_response);
+    // SERVICES_check_response;
 
     while (1) pm_core_enter_normal_sleep();
-    //while (1) pm_core_enter_deep_sleep();
 }
