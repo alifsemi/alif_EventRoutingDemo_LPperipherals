@@ -1,3 +1,12 @@
+/* Copyright (C) 2024 Alif Semiconductor - All Rights Reserved.
+ * Use, distribution and modification of this code is permitted under the
+ * terms stated in the Alif Semiconductor Software License Agreement
+ *
+ * You should have received a copy of the Alif Semiconductor Software
+ * License Agreement with this file. If not, please write to:
+ * contact@alifsemi.com, or visit: https://alifsemi.com/license
+ *
+ */
 #include <RTE_Components.h>
 #include CMSIS_device_header
 #include <Driver_GPIO.h>
@@ -74,7 +83,7 @@ void main (void)
     /* LPTIMER will start the event chain. For the demo to work:
      *  P15_0 must be tied to P15_1
      *  P9_2 must be tied to P15_2
-     * 
+     *
      * LPTIMER0 P15_0   ->  P15_1   LPGPIO1 -> LPUART TX event trigger
      * LPUART_TX P9_2   ->  P15_2   LPGPIO2 -> LPSPI TX event trigger
      * LPUART TX will output eight zero characters, each with a stop bit.

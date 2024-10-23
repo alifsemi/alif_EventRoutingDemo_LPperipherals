@@ -1,8 +1,6 @@
 out/
-RTE/*
-!RTE/Device
-RTE/Device/*/*
-!RTE/Device/*/*.h
 tmp/
 *.yml
+!alif.cbuild-pack.yml
 *.cprj
+*.clangd

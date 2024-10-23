@@ -52,27 +52,26 @@ on the RTSS-HE only.***
 
 ### Software Setup
 The following software must be installed on your system (tested with Ubuntu 22.04 LTS)
-1. Setup the VSCode environment as outlined in [Getting Started with VSCode](https://alifsemi.com/download/AUGD0012).
-   - Ubuntu 22.04 LTS users, if using GDB then please download Arm GCC 10.3-2021.10 (GDB has python issues in GCC 11 & 12 with Ubuntu 22.04). Newer GCC versions are okay if not using GDB.
+1. Check the [Getting Started with VSCode CMSIS pack project](https://github.com/alifsemi/alif_vscode-template/blob/main/doc/getting_started.md) to set all the needed tools and how build the project. Especially for flashing and debugging this must be done https://github.com/alifsemi/alif_vscode-template/blob/main/doc/getting_started.md#visual-studio-code-settings
 2. Modify the Alif Ensemble CMSIS DFP v1.3.0 with the files provided in this project
-   - Extract the archive in the patch directory and overwrite the files at cmsis-packs/AlifSemiconductor/Ensemble/1.3.0/
-3. Install the latest SEGGER J-Link software (optional) [SEGGER J-Link](https://www.segger.com/downloads/jlink)
+Extract the archive in the patch directory and overwrite the files at (in Linux) {user home}/.cache/arm/packs/AlifSemiconductor/Ensemble/1.3.0/
 
 After setting up the development environment
-1. Clone this repository and open the folder as a project in VSCode.
-2. Make sure you select the configuration by pressing F1 and typing "select a configuration" and picking the core - HE or HP
-3. Press CTRL-SHIFT-B to build the project. Default configuration is for executing-in-place (XIP) from MRAM.
-4. Press F1 -> "Run Tasks" -> "Install Debug Stubs with Security Toolkit"
-5. Press F1 -> "Run Tasks" -> "Program with Security Toolkit"
-6. Press 5 to start debugging, **OR** *skip to the next step*
+1. Clone this repository and run 'git submodule update --init' in the folder
+2. Open the folder as a project in VSCode.
+3. Press F1 -> "Run Tasks" -> "First time pack installation" if not done already.
+4. [Building](https://github.com/alifsemi/alif_vscode-template/blob/main/doc/getting_started.md#building-the-project-with-cmsis-solution)
+5. Press F1 -> "Run Tasks" -> "Install Debug Stubs with Security Toolkit"
+6. Press F1 -> "Run Tasks" -> "Program with Security Toolkit"
+7. Press 5 to start debugging, **OR** *skip to the next step*
 
-Note: To clean the project, press F1 -> "Run Tasks" -> "Clean Project with cbuild". Otherwise, if you use the "Clean All" option instead, then it will delete the RTE_Device.h file which was modified to make the following changes:
-* RTE_LPSPI_DMA_ENABLE set to 1
-* RTE_LPSPI_SELECT_DMA0 set to 0
-* RTE_LPUART_DMA_ENABLE set to 1
-* RTE_LPUART_SELECT_DMA0 set to 0
-
-If the DMA_ENABLE is set to 0 or if the SELECT_DMA0 is set to 1 then the demo will not work properly.
+Note: To clean the project, press F1 -> "Run Tasks" -> "Clean all (including YML build files)".
+Changes done to RTE_Config.h compared to original file in 1.3.0:
+   * RTE_LPSPI_DMA_ENABLE set to 1
+   * RTE_LPSPI_SELECT_DMA0 set to 0
+   * RTE_LPUART_DMA_ENABLE set to 1
+   * RTE_LPUART_SELECT_DMA0 set to 0
+In [RTE_Config.h](app/RTE/Device/AE722F80F55D5LS_M55_HE/RTE_Device.h), if the DMA_ENABLE is set to 0 or if the SELECT_DMA0 is set to 1 then the demo will not work properly.
 
 **Troubleshooting**
 * [ERROR] Target did not respond
@@ -87,4 +86,3 @@ If the DMA_ENABLE is set to 0 or if the SELECT_DMA0 is set to 1 then the demo wi
 * SPI transactions only occur once, and are not continuous
    1. DMA might not be enabled for this project
    2. Use git to restore the file at RTE/Device/AExxx/RTE_Device.h
-
