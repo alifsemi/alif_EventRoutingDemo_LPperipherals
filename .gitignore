@@ -1,3 +1,8 @@
+app/RTE/*
+!app/RTE/Device
+app/RTE/Device/*/*
+!app/RTE/Device/*/*.h
+!app/RTE/Device/*/*.ld
 out/
 tmp/
 *.yml
