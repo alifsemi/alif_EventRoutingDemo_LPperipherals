@@ -1,8 +1,11 @@
+app/RTE/*
+!app/RTE/Device
+app/RTE/Device/*/*
+!app/RTE/Device/*/*.h
+!app/RTE/Device/*/*.ld
 out/
-RTE/*
-!RTE/Device
-RTE/Device/*/*
-!RTE/Device/*/*.h
 tmp/
 *.yml
+!alif.cbuild-pack.yml
 *.cprj
+*.clangd

@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Open-CMSIS-Pack/devtools/tools/projmgr/2.6.0/tools/projmgr/schemas/cproject.schema.json
+project:
+  groups:
+    - group: App
+      files:
+        - file: main.c
+        - file: LPSPI_config.c
+        - file: LPTIMER_config.c
+        - file: LPUART_config.c
+    - group: Board
+      files:
+        - file: ../libs/board/devkit_gen2/board_init.c
+  output:
+    base-name: $Project$
+    type:
+      - elf
+      - bin
+  add-path:
+    - .
+    - ../libs/board/
+  components:
+    # needed for Alif Ensemble support
+    - component: AlifSemiconductor::Device:Startup&C Startup
+    - component: ARM::CMSIS:CORE
+    # - component: ARM::CMSIS-Compiler:I/O:STDIN&User
+    # - component: ARM::CMSIS-Compiler:I/O:STDOUT&User
+    #   define:
+    #     - asm=__asm
+
+    # peripheral drivers & middleware, use GUI to modify
+    - component: AlifSemiconductor::Device:Power Management
+    - component: AlifSemiconductor::Device:SE runtime Services:Initialization Helper&Source
+    - component: AlifSemiconductor::Device:SE runtime Services:core&Source
+    - component: AlifSemiconductor::Device:SOC Peripherals:DMA
+    - component: AlifSemiconductor::Device:SOC Peripherals:GPIO
+    - component: AlifSemiconductor::Device:SOC Peripherals:LPTIMER
+    - component: AlifSemiconductor::Device:SOC Peripherals:MHU
+    - component: AlifSemiconductor::Device:SOC Peripherals:PINCONF
+    - component: AlifSemiconductor::Device:SOC Peripherals:SPI
+    - component: AlifSemiconductor::Device:SOC Peripherals:USART
