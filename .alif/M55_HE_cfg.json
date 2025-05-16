@@ -7,10 +7,10 @@
   },
   "USER_APP": {
     "binary": "alif-img.bin",
-    "loadAddress": "0x58000000",
+    "mramAddress": "0x80000000",
     "version": "1.0.0",
     "cpu_id": "M55_HE",
-    "flags": ["boot", "load"],
+    "flags": ["boot"],
     "signed": false
   }
 }
